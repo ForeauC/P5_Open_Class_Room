@@ -1,45 +1,50 @@
-// Envoi d'une réponse à l'API
-fetch("http://localhost:3000/api/products/")
-    .then(res => console.log(res))
-
-// Parcourir l'ensemble des produits dans l'API
-fetch("http://localhost:3000/api/products")
-    .then(res => res.json())
-    .then(data => console.log(data))
-
-fetch("http://localhost:3000/api/products")
-    .then(res => res.json())
-    .then(data => productName = data[0].name)
-
-function addElement () {
-// Pour créer un nouveau élement "a" enfant de l'ID "items" dans le DOM de la page index.html     
-    const newLink = document.createElement("a");
-    const currentLink = document.getElementById('items');
-    currentLink.appendChild(newLink)
-
-// Pour créer un nouveau élement "article" enfant de la balise "a" dans le DOM de la page index.html
-    const newArcticle = document.createElement("article");
-    const currentArticle =document.querySelector('#items a')
-    currentArticle.appendChild(newArcticle)
-
-// Pour créer un élement "img" enfant de la balise "article" dans le dom de la page index.html  
-    const newImage = document.createElement("img");
-    
-// Pour créer un élement "h3" enfant de la balise "article" dans le dom de la page index.html    
-    const newH3 = document.createElement('h3');
-    newH3.className = "productName";
-    
-// Pour créer un élement "p" enfant de la balise "article" dans le dom de la page index.html
-    const newP = document.createElement('p');
-    newP.className = "productDescription";
-    
-    const article = document.getElementsByTagName("article");
-
-    article[0].appendChild(newImage)
-    article[0].appendChild(newH3)
-    article[0].appendChild(newP)
-
+// La fonction addProduct permet de récupère tous les produits par l'API 
+async function addProducts() {
+    const response = await fetch('http://localhost:3000/api/products')
+    if(response.ok){
+        return response.json()
+    }
 }
 
-addElement ();
+// Appeler la fonction addProduct
+
+addProducts()
+    .then(function(products){
+        
+
+        //Pour chaque élément de la réponse, créer un log dans la console et créer le produit dans le DOM (index.html)
+        products.forEach(function(element) {
+        console.log(element)
+    
+        //Crée une balise a pour chaque produit
+        const newA = document.createElement('a')
+        const elementItems = document.getElementById('items')
+        newA.href = ('./product.html?id=') + element._id
+        elementItems.appendChild(newA)
+
+        //Crée une balise article pour chaque produit
+        const newArticle = document.createElement('article')
+        newA.appendChild(newArticle)
+
+        //Crée une balise img pour chaque produit
+        const newImg = document.createElement('img')
+        newImg.src = element.imageUrl
+        newImg.alt = element.alTxt
+        newArticle.appendChild(newImg)
+
+        //Crée une balise h3 pour chaque produit
+        const newH3 = document.createElement('h3')
+        newH3.className = ('productName')
+        newH3.innerText = element.name
+        newArticle.appendChild(newH3)
+
+        //Crée une balise p pour chaque produit
+        const newP = document.createElement('p')
+        newP.classList = ('productsDescription')
+        newP.innerText = element.description 
+        newArticle.appendChild(newP)
+
+        });
+
+    })
 

@@ -6,6 +6,7 @@ async function init() {
     createHTML(products);
 }    
 
+//fonction pour récupérer les produits à partir de l'API
 function getProducts() {
     return ( 
     fetch('http://localhost:3000/api/products')
@@ -21,7 +22,7 @@ function getProducts() {
 }
 
 function createHTML(products){
-    
+    //Pour chaque élément de la réponse, créer un log dans la console et créer le produit dans le DOM 
     products.forEach(function(element){
         console.log(element);
     

@@ -1,44 +1,85 @@
-//Récupérer la valeur id à partir de l'URL
+let product = [];
 
+async function init(){
+    product = await getProductById();
+    console.log(product)
+    buildHTML(product);
+    addToCard ();
+}
 
-//ajouter un image du produit
-const productImg = document.querySelector('.item__img');
-const imgSofa = document.createElement('img');
-productImg.appendChild(imgSofa);
-
-
-const productDescription = document.getElementById('title');
-
-const productPrice = document.getElementById('price');
-
-const productColor = document.getElementById('color');
-
-// Fonction pour récupérer un produit avec son id
-async function getProductById (){
+//function pour récupérer le produit avec son ID à partir de l'API
+function getProductById() {
     let params = new URL(document.location).searchParams;
     let id = params.get("id");// id du produit
     console.log(id);
-    console.log(`http://localhost:3000/api/products/${id}`)
-    const response = await fetch(`http://localhost:3000/api/products/${id}`);
-    if(response.ok){
-        console.log(response)
-        return response.json
-    }     
+    return ( 
+        fetch(`http://localhost:3000/api/products/${id}`)
+            .then((res) => res.json())
+            .then((data) => {
+                console.log("data", data);
+                return data
+            })
+            .catch((data) => { 
+                return error;
+            }) 
+        );
 }
 
-const product = await getProductById();
-createElements(product);
+function buildHTML() {
+        //ajout de l'image et du alt texte du produit à partir de l'API
+        const itemImg = document.querySelector(".item__img");
+        const productImg = document.createElement("img"); 
+        productImg.src = product.imageUrl;
+        productImg.alt = product.altText;
+        itemImg.appendChild(productImg);
+        //ajout du nom du produit à partir de l'API
+        const productTitle = document.getElementById("title");
+        productTitle.innerHTML = product.name;
+        //ajout du prix du produit à partir de l'API
+        const productPrice = document.getElementById("price");
+        productPrice.innerHTML = product.price;
+        //ajout de la description du produit à partir du produit 
+        const productDescription = document.getElementById("description");
+        productDescription.innerHTML = product.description;
+        
+        const productColorsChoice = document.getElementById("colors");
+        //ajout du choix du couleur avec une boucle for à partir de l'API
+        for (let i = 0; i < product.colors.length; i++){
+            const colorChoice = document.createElement("option");
+            colorChoice.value = product.colors[i];
+            colorChoice.innerHTML = product.colors[i];
+            productColorsChoice.appendChild(colorChoice);
+        }     
+}      
 
-function createElements(array) {
-    console.log(array)
-    .then(function(product){
-        product.forEach(function(element) {
-            console.log(element);
-        let productImg = document.querySelector(".item__img");
-        let img = document.createElement("img"); // Create img for the product.
-        productImg.appendChild(img);
-
-        })
+function addToCard () {
+    const colorsOption = document.getElementById("colors");
+    const productQuantity = document.getElementById("quantity");    
+    const addToCartButton = document.getElementById("addToCart");
+    //Click sur le bouton "ajouter panier" 
+    addToCartButton.addEventListener("click", (event) => {
+        const color = colorsOption.value;
+        const quantity = productQuantity.value;
+        //si au moin une de ces valeurs n'est pas accepter (invalide)
+        if (color == "" || quantity < 1 || quantity > 100) {
+            alert("Quantité ou couleur invalide");
+        //sinon valider le produit avec couleur / quantité / ID du produit
+        } else {
+            const validProduct = {
+                color: color,
+                quantity: quantity,
+                idProduct : product.id,
+            };
+            alert("produit ajouté au panier avec succès")
+            console.log(validProduct);
+        }
+        
     })
-    
-}
+        
+}             
+
+init();
+
+
+
+

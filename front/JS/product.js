@@ -60,7 +60,7 @@ function addToCard () {
     addToCartButton.addEventListener("click", (event) => {
         const color = colorsOption.value;
         const quantity = productQuantity.value;
-        //si au moin une de ces valeurs n'est pas accepter (invalide)
+        //si au moin une de ces valeurs n'est pas acceptée (ajout au panier invalide)
         if (color == "" || quantity < 1 || quantity > 100) {
             alert("Quantité ou couleur invalide");
         //sinon valider le produit avec couleur / quantité / ID du produit
@@ -68,7 +68,7 @@ function addToCard () {
             const validProduct = {
                 color: color,
                 quantity: quantity,
-                idProduct : product.id,
+                idProduct : product._id,
             };
             alert("produit ajouté au panier avec succès")
             console.log(validProduct);

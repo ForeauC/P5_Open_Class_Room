@@ -62,7 +62,8 @@ function addToCard () {
         const quantity = productQuantity.value;
         //si au moin une de ces valeurs n'est pas acceptée (ajout au panier invalide)
         if (color == "" || quantity < 1 || quantity > 100) {
-            alert("Quantité ou couleur invalide");
+            alert("Renseignez la couleur") = color;
+            alert("Rensignez la bonne quantité") = quantity;
         //sinon valider le produit avec couleur / quantité / ID du produit
         } else {
             const validProduct = {
@@ -72,15 +73,16 @@ function addToCard () {
             };
             alert("produit ajouté au panier avec succès")
             console.log(validProduct);
-        }
+        }// si il y a déja un produit du même modéle et même couleurs dans localStorage
         if (localStorage.getItem("product")) {
             const productInLocalStorage = JSON.parse(localStorage.getItem("product"));
             const searchProduct = productInLocalStorage.find(product => product.color === color && product.idProduct == id);
+            //ajouter seulement une nouvelle quantité
             if (searchProduct){
                 const newQuantity = parseInt(quantity) + parseInt(searchProduct.quantity);
                 searchProduct = newQuantity;
                 localStorage.setItem("product", JSON.stringify(productInLocalStorage));
-            }else{
+            }else{ //sinon ajouter le produit dans localStorage
                 const productInLocalStorage = JSON.parse(localStorage.getItem("product"));
                 productInLocalStorage.push(validProduct);
                 localStorage.setItem("product", JSON.stringify(productInLocalStorage));

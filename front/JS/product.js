@@ -73,6 +73,20 @@ function addToCard () {
             alert("produit ajouté au panier avec succès")
             console.log(validProduct);
         }
+        if (localStorage.getItem("product")) {
+            const productInLocalStorage = JSON.parse(localStorage.getItem("product"));
+            const searchProduct = productInLocalStorage.find(product => product.color === color && product.idProduct == id);
+            if (searchProduct){
+                const newQuantity = parseInt(quantity) + parseInt(searchProduct.quantity);
+                searchProduct = newQuantity;
+                localStorage.setItem("product", JSON.stringify(productInLocalStorage));
+            }else{
+                const productInLocalStorage = JSON.parse(localStorage.getItem("product"));
+                productInLocalStorage.push(validProduct);
+                localStorage.setItem("product", JSON.stringify(productInLocalStorage));
+                console.log(productInLocalStorage)
+            }
+        }
         
     })
         

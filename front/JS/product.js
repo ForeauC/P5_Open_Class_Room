@@ -3,6 +3,7 @@ const productQuantity = document.getElementById("quantity");
 const addToCartButton = document.getElementById("addToCart");
 let product = [];
 
+
 async function init(){
     product = await getProductById();
     console.log(product)
@@ -67,9 +68,9 @@ function addToBasket() {
     const quantity = productQuantity.value;
         //si au moin une de ces valeurs n'est pas acceptée (ajout au panier invalide)
         if (color === "") {
-            displayError("Renseigner la couleur de votre choix", "bloc-color");
-        } else if  (quantity < 1 || quantity > 100) {
-            displayError("Renseigner la quantité de votre choix", "bloc-quantity");
+            alert("Veuillez renseigner la couleur de vottre choix") = color;
+        } else if (quantity < 1 || quantity > 100) {
+            alert("Veuillez renseigner la quantité de votre choix") = quantity;
         } else {
             const validProduct = {
                 color: color,
@@ -122,48 +123,6 @@ function addCart(product) {
     }
     saveCart(cart);
 }
-
-
-function displayError(divError, msgError) {
-    const itemColor = document.querySelector("div.item__content__settings__color");
-    const itemQuantity = document.querySelector("div.item__content__settings__quantity")
-
-    var divError = document.createElement("div");
-    divError.className = "error";
-
-    var msgError = document.createElement("p");
-    msgError.className = "bloc-color";
-    const blocColor = document.getElementsByClassName("bloc-color").innerText = "Renseigner la couleur de votre choix";
-    msgError.className = "bloc-quantity";
-    const blocQuantity = document.getElementsByClassName("bloc-quantity").innerText = "Renseigner la quantité de votre choix";
-
-
-    itemColor.appendChild(divError);
-    itemQuantity.appendChild(divError)
-
-    divError.appendChild(msgError);
-
-}
-
-/*function displayErrorColor(errorColor, itemColor){
-    var itemColor = document.querySelector("div.item__content__settings__color")
-    const divErrorColor = document.createElement("div")
-    var errorColor = document.createElement("p");
-    errorColor.className = "errorMsg";
-    errorColor.innerText = "Renseigner la couleur de votre choix";
-    itemColor.appendChild(divErrorColor);
-    divErrorColor.appendChild(errorColor);
-}
-
-function displayErrorQuantity(errorQuantity, itemQuantity){
-    var itemQuantity = document.querySelector("div.item__content__settings__quantity")
-    const divErrorQuant = document.createElement("div")
-    var errorQuantity = document.createElement("p");
-    errorQuantity.className = "errorMsg";
-    errorQuantity.innerText = "Renseigner la quantité de votre choix";
-    itemQuantity.appendChild(divErrorQuant);
-    divErrorQuant.appendChild(errorQuantity);
-}*/
 
 init();
 

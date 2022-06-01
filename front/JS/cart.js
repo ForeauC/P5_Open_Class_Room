@@ -54,10 +54,11 @@ function getProductsFromAPI(productInLocalStorage) {
 }
 
 function buildHTMLCart() {
-    const elementToBuildHTML = await getProductsFromAPI(productInLocalStorage);
+    const elementToBuildHTML =  getProductsFromAPI(productInLocalStorage);
     console.log("element HTML", elementToBuildHTML)
     
     elementToBuildHTML.forEach(elementCart =>{
+        
         const cartSection = document.getElementById("cart__items");
 
         const cartArcticle = document.createElement("article");

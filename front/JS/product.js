@@ -103,7 +103,9 @@ function addCart(product) {
     const color = colorsOption.value;
     const quantity = productQuantity.value;  
     
+    
     let cart = getCart();
+
     let foundProduct = cart.find(p => p.id === product.id && p.color === product.color);
     // Si trouvé, ajustement quantité
     if(foundProduct != undefined){
@@ -112,6 +114,7 @@ function addCart(product) {
     // Sinon ajouter un nouveau produit
     }else{
         product.quantity = parseInt(quantity);        
+       
         product.color = color
         cart.push(product)
         console.log("cart",cart)

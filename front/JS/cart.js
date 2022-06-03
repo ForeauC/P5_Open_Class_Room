@@ -1,6 +1,7 @@
+
 //afficher les produits du LocalStorage
 const productInLocalStorage = JSON.parse(localStorage.getItem("cart"));
-console.log(productInLocalStorage);
+//console.log(productInLocalStorage);
 
 async function init() {
     noProductInLocalStorage();
@@ -23,7 +24,7 @@ function getProducts(idProduct) {
     fetch(`http://localhost:3000/api/products/${idProduct}`)
         .then((res) => res.json())
         .then((data) => {
-            console.log("data", data);
+            //console.log("data", data);
             return data
         })
         .catch((data) => { 
@@ -33,11 +34,11 @@ function getProducts(idProduct) {
 }
 
 //Crée un nouveau tableau avec les élement des produits au complet 
-function getProductsFromAPI(productInLocalStorage) {
+async function getProductsFromAPI() {
     let completeProductTable = [];
-    productInLocalStorage.forEach(productLS =>{ 
 
-        getProducts(productLS.idProduct).then((productAPI) => {
+    for (const productLS of productInLocalStorage) {
+        await getProducts(productLS.idProduct).then((productAPI) => {
 
             completeProductTable.push( {
                 id: productAPI._id,
@@ -48,17 +49,18 @@ function getProductsFromAPI(productInLocalStorage) {
                 color: productLS.color
             }) 
         })
-    });
-        
+    }        
     return completeProductTable;
 }
 
-function buildHTMLCart() {
-    const elementToBuildHTML =  getProductsFromAPI(productInLocalStorage);
+async function buildHTMLCart(){
+
+    const elementToBuildHTML =   await getProductsFromAPI();
     console.log("element HTML", elementToBuildHTML)
     
     elementToBuildHTML.forEach(elementCart =>{
-        
+        console.log(elementCart)
+
         const cartSection = document.getElementById("cart__items");
 
         const cartArcticle = document.createElement("article");
@@ -90,7 +92,7 @@ function buildHTMLCart() {
         cartDivContentDescription.appendChild(cartProductName);
 
         const cartProductColor = document.createElement("p")
-        cartProductColor.innerText = elementToBuildHTML[product].color;
+        cartProductColor.innerText = elementCart.color;
         cartDivContentDescription.appendChild(cartProductColor);
 
         const cartProductPrice = document.createElement("p");

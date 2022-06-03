@@ -110,7 +110,7 @@ function addCart(product) {
     // Si trouvé, ajustement quantité
     if(foundProduct != undefined){
         foundProduct.quantity += parseInt(quantity);
-
+ 
     // Sinon ajouter un nouveau produit
     }else{
         product.quantity = parseInt(quantity);        

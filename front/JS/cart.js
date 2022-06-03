@@ -3,6 +3,7 @@
 const productInLocalStorage = JSON.parse(localStorage.getItem("cart"));
 //console.log(productInLocalStorage);
 
+
 async function init() {
     noProductInLocalStorage();
 }
@@ -132,4 +133,68 @@ async function buildHTMLCart(){
     }); 
 }
 
+function saveCart(cart) {
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
 
+function getCart() {
+    let cart = (localStorage.getItem("cart"));
+    if(cart == null){
+        return [];
+    }else{
+        return JSON.parse(cart);
+    }      
+}
+
+// calculer le nombre produit total dans le panier
+function getNumberProduct () {
+    let cart = getCart();
+    let number = 0;
+    for (let product of cart) {
+        number += product.quantity;
+    }
+    let totalQuantity = document.getElementById("totalQuantity");
+    totalQuantity.innerText = number;
+}
+getNumberProduct();
+
+//calculer le prix total du panier
+async function getTotalPrice() {
+    const elementToBuildHTML = await getProductsFromAPI();
+    let totalPrice = 0;
+    for (let product of elementToBuildHTML) {
+        const elementToBuildHTML = getProductsFromAPI()
+        totalPrice += product.quantity * product.price;
+    }
+    let totalPriceCart = document.getElementById("totalPrice")
+    totalPriceCart.innerText = totalPrice;
+}
+getTotalPrice();
+
+//Pour supprimmer un produit du panier
+async function removeFromCart() {
+    const removeProduct = document.getElementsByClassName("deleteItem")
+    console.log("remove", removeProduct)
+    removeProduct.addEventListener("click", (event) => {
+        let cart = getCart();
+        cart = cart.filter(p => p.id === product.id && p.color === product.color);
+        saveCart(cart)
+    });
+}
+removeFromCart();
+
+//pour changer la quantité des produit du panier
+/*function changeQuantity(product, quantity) {
+    const quantityChange = document.getElementsByClassName("itemQuantity");
+    quantityChange.addEventListener("change", (event) => {
+    let cart = getCart();
+    let foundProduct = cart.find(p => p.id === product.id && p.color === product.color);   
+    if(foundProduct != undefined){
+        foundProduct.quantity += parseInt(quantity);
+    } 
+    saveCart(cart);   
+    })
+
+   
+}
+changeQuantity();*/

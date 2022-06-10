@@ -130,20 +130,10 @@ async function buildHTMLCart(){
         cartProductDelete.className= "deleteItem";
         cartProductDelete.innerText = "Supprimer";
         cartDivContentDelete.appendChild(cartProductDelete);
+
     }); 
-}
+    AddEventchangeQuantity();
 
-function saveCart(cart) {
-    localStorage.setItem("cart", JSON.stringify(cart));
-}
-
-function getCart() {
-    let cart = (localStorage.getItem("cart"));
-    if(cart == null){
-        return [];
-    }else{
-        return JSON.parse(cart);
-    }      
 }
 
 // calculer le nombre produit total dans le panier
@@ -171,30 +161,27 @@ async function getTotalPrice() {
 }
 getTotalPrice();
 
-//Pour supprimmer un produit du panier
-async function removeFromCart() {
-    const removeProduct = document.getElementsByClassName("deleteItem")
-    console.log("remove", removeProduct)
-    removeProduct.addEventListener("click", (event) => {
-        let cart = getCart();
-        cart = cart.filter(p => p.id === product.id && p.color === product.color);
-        saveCart(cart)
-    });
-}
-removeFromCart();
 
 //pour changer la quantité des produit du panier
-/*function changeQuantity(product, quantity) {
-    const quantityChange = document.getElementsByClassName("itemQuantity");
-    quantityChange.addEventListener("change", (event) => {
-    let cart = getCart();
-    let foundProduct = cart.find(p => p.id === product.id && p.color === product.color);   
-    if(foundProduct != undefined){
-        foundProduct.quantity += parseInt(quantity);
-    } 
-    saveCart(cart);   
+function AddEventchangeQuantity() {
+    const quantityInput = document.querySelectorAll(".itemQuantity");
+    quantityInput.forEach((quantityProduct) => {
+        quantityProduct.addEventListener("change", (e) => {
+            changeQuantity(e);
+        })
     })
 
-   
 }
-changeQuantity();*/
+
+function changeQuantity(e){
+    const quantityElement = e.target.closest("input.itemQuantity");
+    console.log("element", quantityElement);
+
+    if(quantityElement != null) {
+        const number = quantityElement.innerText;
+    }
+}
+
+
+
+

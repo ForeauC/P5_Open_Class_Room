@@ -122,6 +122,7 @@ function addCart(product) {
     saveCart(cart);
 }
 
+
 init();
 
 

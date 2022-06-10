@@ -182,6 +182,14 @@ function changeQuantity(e){
     }
 }
 
-
+// Function qui permet de récuper l'item "cart"
+function getCart() {
+    let cart = (localStorage.getItem("cart"));
+    if(cart == null){
+        return [];
+    }else{
+        return JSON.parse(cart);
+    }      
+}
 
 

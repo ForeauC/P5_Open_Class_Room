@@ -178,22 +178,25 @@ function changeQuantity(e){
     console.log("element", quantityElement);
 
     if(quantityElement != null) {
+        
         const number = quantityElement.value;
-        const id = e.target.closest("article.cart--item").getAttribute('data-id');
-        console.log("id",id)
-        const color = e.target.closest("article.cart--item").getAttribute('data-color');
-        console.log("color",color)
+        console.log("number", number)
+        const productId = e.target.closest("article.cart--item").getAttribute('data-id');
+        console.log("id",productId)
+        const productColor = e.target.closest("article.cart--item").getAttribute('data-color');
+        console.log("color",productColor)
+        
+        let cart = getCart();
+        let foundProduct = cart.findIndex(p => p.productId === cart.idProduct && p.productColor === cart.color);
+        console.log("found",foundProduct)
+        if (foundProduct != undefined) {
+        foundProduct.quantity += parseInt(number);
+        }
+        saveCart(cart)
     }
-    let cart = getCart();
-    let foundProduct = cart.find(p => p.id === id && e.color === color);
-    console.log("found",foundProduct)
-    if (foundProduct != undefined) {
-        foundProduct.quantity += quantity;
-    }
-    saveCart(cart)
     getNumberProduct();
     getTotalPrice();
-    location.reload();
+    //location.reload();
 }
 
 // Function qui permet de récuper l'item "cart"

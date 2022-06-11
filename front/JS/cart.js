@@ -172,31 +172,34 @@ function AddEventchangeQuantity() {
     })
 
 }
-
+// fonction pour changer la quantité dans le dom et le local storage
 function changeQuantity(e){
-    const quantityElement = e.target.closest("input.itemQuantity");
+    const quantityElement = e.target.closest("input.itemQuantity");//cibler l'input pour le changement de quantité
     console.log("element", quantityElement);
 
     if(quantityElement != null) {
-        
-        const number = quantityElement.value;
+
+        const number = quantityElement.value;//valeur quantité dans le dom
         console.log("number", number)
         const productId = e.target.closest("article.cart--item").getAttribute('data-id');
-        console.log("id",productId)
+        console.log("id",productId)//cibler l'id du produit
         const productColor = e.target.closest("article.cart--item").getAttribute('data-color');
-        console.log("color",productColor)
-        
-        let cart = getCart();
-        let foundProduct = cart.findIndex(p => p.productId === cart.idProduct && p.productColor === cart.color);
+        console.log("color",productColor)//cibler la couleur du produit
+
+        let cart = getCart();//on vas chercher le contenu du LS
+        console.log("caaart",cart)
+        let foundProduct = cart.findIndex(p => p.idProduct === productId && p.color === productColor);//pour chercher le meme l'id et couleur dans le LS
         console.log("found",foundProduct)
+       
         if (foundProduct != undefined) {
-        foundProduct.quantity += parseInt(number);
+        cart[foundProduct].quantity = parseInt(number);//ajouter la nouvelle quantité au LS
+        console.log("cart2", cart[2])
+        cart.push(localStorage.setItem("cart", JSON.stringify(cart)))//push du nouveau panier avec la nouvelle quantité
         }
-        saveCart(cart)
     }
     getNumberProduct();
     getTotalPrice();
-    //location.reload();
+    location.reload();
 }
 
 // Function qui permet de récuper l'item "cart"

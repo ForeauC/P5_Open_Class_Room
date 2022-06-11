@@ -66,8 +66,8 @@ async function buildHTMLCart(){
 
         const cartArcticle = document.createElement("article");
         cartArcticle.className = "cart--item";
-        cartArcticle.dataset.id = "{product-id}";
-        cartArcticle.dataset.color = "{product-color}";
+        cartArcticle.dataset.id = elementCart.id;
+        cartArcticle.dataset.color = elementCart.color;
         cartSection.appendChild(cartArcticle);
 
         const cartDivImg = document.createElement("div");
@@ -178,8 +178,22 @@ function changeQuantity(e){
     console.log("element", quantityElement);
 
     if(quantityElement != null) {
-        const number = quantityElement.innerText;
+        const number = quantityElement.value;
+        const id = e.target.closest("article.cart--item").getAttribute('data-id');
+        console.log("id",id)
+        const color = e.target.closest("article.cart--item").getAttribute('data-color');
+        console.log("color",color)
     }
+    let cart = getCart();
+    let foundProduct = cart.find(p => p.id === id && e.color === color);
+    console.log("found",foundProduct)
+    if (foundProduct != undefined) {
+        foundProduct.quantity += quantity;
+    }
+    saveCart(cart)
+    getNumberProduct();
+    getTotalPrice();
+    location.reload();
 }
 
 // Function qui permet de récuper l'item "cart"
@@ -192,4 +206,7 @@ function getCart() {
     }      
 }
 
+function saveCart(cart) {
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
 

@@ -243,5 +243,48 @@ function getCart() {
     }      
 }
 
+/*---------------------------------- Formulaire ---------------------------------------------*/
 
+// récupération les input du formulaire
+const inputFirstName = document.querySelector('#firstName');
+const errorFirstName = document.querySelector('#firstNameErrorMsg');
 
+const inputLastName = document.querySelector('#lastName');
+const errorLastName = document.querySelector('#lastNameErrorMsg');
+
+const inputAddress = document.querySelector('#address');
+const errorAddress = document.querySelector('#addressErrorMsg');
+
+const inputCity = document.querySelector('#city');
+const errorCity = document.querySelector('#cityErrorMsg');
+
+const inputEmail = document.querySelector('#email');
+const errorEmail = document.querySelector('#emailErrorMsg')
+
+// création regex (expressions réguliéres) pour contrôler le formulaire
+const regExpText = /^[A-Za-zÀ-ÖØ-öø-ÿ\-\'\ ]{2,30}$/;
+const regExpAddress = /^[0-9A-Za-zÀ-ÖØ-öø-ÿ\-\'\ ]{5,30}$/;
+const regExpEmail = /\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/i;
+
+let errors = [];
+// test de la valeur rentrer par l'utilisateur et  affichage du message d'erreur
+function validateForm (input, regexp, error, message) {
+    input.addEventListener('change', (e) => {
+        let regexpTest = regexp.test(e.target.value);//test avec le regex selon input renseigner
+        console.log("regexpTest", regexpTest)
+        if(regexpTest === false) {
+            error.textContent = message;//texte d'erreur 
+            errors.push(error);// push du texte d'erreur si le test regex ne passe pas
+            console.log('tableau errors', error)   
+        } else {
+         error.textContent = '☑️';// validation si le test regex est ok
+         errors = errors.filter(id => id != error);//aucun message d'erreur si il n'y pas d'erreur
+        }
+    })
+}
+
+validateForm(inputFirstName, regExpText, errorFirstName, 'Merci de saisir votre prénom');
+validateForm(inputLastName, regExpText, errorLastName, 'Merci de saisir votre nom');
+validateForm(inputAddress, regExpAddress, errorAddress, 'Merci de saisir votre adresse');
+validateForm(inputCity, regExpText, errorCity, 'Merci de saisir votre ville');
+validateForm(inputEmail, regExpEmail, errorEmail, 'Merci de saisir une adresse email valide');

@@ -133,7 +133,7 @@ async function buildHTMLCart(){
 
     }); 
     AddEventchangeQuantity();
-
+    AddEventRemoveQuantity();
 }
 
 // calculer le nombre produit total dans le panier
@@ -182,9 +182,9 @@ function changeQuantity(e){
         const number = quantityElement.value;//valeur quantité dans le dom
         console.log("number", number)
         const productId = e.target.closest("article.cart--item").getAttribute('data-id');
-        console.log("id",productId)//cibler l'id du produit
+        console.log("id",productId)//cibler l'id du produit dans le dom
         const productColor = e.target.closest("article.cart--item").getAttribute('data-color');
-        console.log("color",productColor)//cibler la couleur du produit
+        console.log("color",productColor)//cibler la couleur du produit dans le dom
 
         let cart = getCart();//on vas chercher le contenu du LS
         console.log("caaart",cart)
@@ -193,10 +193,41 @@ function changeQuantity(e){
        
         if (foundProduct != undefined) {
         cart[foundProduct].quantity = parseInt(number);//ajouter la nouvelle quantité au LS
-        console.log("cart2", cart[2])
         cart.push(localStorage.setItem("cart", JSON.stringify(cart)))//push du nouveau panier avec la nouvelle quantité
         }
     }
+    getNumberProduct();
+    getTotalPrice();
+    location.reload();
+}
+
+function AddEventRemoveQuantity() {
+    const deleteInput = document.querySelectorAll(".deleteItem");
+    deleteInput.forEach((deleteProduct) => {
+        deleteProduct.addEventListener("click", (e) => {
+            removeProduct(e);
+        })
+    })
+}
+
+//function  pour supprimer un produit du panier
+function removeProduct(e){
+    const deleteP = e.target.closest("p.deleteItem");//cibler le p pour supprimer un produit dans le dom
+    console.log("deleteP", deleteP)
+    const deleteText = deleteP.innerText//texte pour supprimer un produit dans le dom
+    console.log("delete", deleteText)
+
+    const productId = e.target.closest("article.cart--item").getAttribute('data-id');
+    console.log("id",productId)//cibler l'id du produit dans le dom
+    const productColor = e.target.closest("article.cart--item").getAttribute('data-color');
+    console.log("color",productColor)//cibler la couleur du produit dans le dom
+
+    let cart = getCart();
+    cart = cart.filter(p => p.idProduct != productId || p.color != productColor)//chercher les id et color qui ne faut pas supprimer
+    console.log("filter", cart)
+
+    cart.push(localStorage.setItem("cart", JSON.stringify(cart)))//push du nouveau panier
+
     getNumberProduct();
     getTotalPrice();
     location.reload();
@@ -212,7 +243,5 @@ function getCart() {
     }      
 }
 
-function saveCart(cart) {
-    localStorage.setItem("cart", JSON.stringify(cart));
-}
+
 

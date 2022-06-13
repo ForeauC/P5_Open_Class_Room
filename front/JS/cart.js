@@ -288,3 +288,50 @@ validateForm(inputLastName, regExpText, errorLastName, 'Merci de saisir votre no
 validateForm(inputAddress, regExpAddress, errorAddress, 'Merci de saisir votre adresse');
 validateForm(inputCity, regExpText, errorCity, 'Merci de saisir votre ville');
 validateForm(inputEmail, regExpEmail, errorEmail, 'Merci de saisir une adresse email valide');
+
+//function pour l'envoie du panier pour la commande 
+function validateCart(){
+    const orderForm = document.querySelector(".cart__order__form");
+    
+    orderForm.addEventListener("submit", (e) =>{
+        e.preventDefault();
+        let cart = getCart();
+        let products = [];
+        //si aucune erreur dans le formulaire et que le panier est supérieur à 1 élement on crée une tableau products et un objet contact
+        if(errors.length == 0 && cart.length > 0) {
+            for(product of cart) {
+                products.push(product.idProduct)
+                console.log("products",products)
+            }
+
+            let contact = {
+                firstName: inputFirstName.innerText,
+                lastName: inputLastName.innerText,
+                address: inputAddress.innerText,
+                city: inputCity.innerText,
+                email: inputEmail.innerText
+            }
+            console.log("contact", contact)
+
+            sendFormaly(products, contact);// appel de la fonction d'envoi de la commande à l'API
+    }
+    })
+ 
+}
+
+validateCart();
+
+function sendFormaly(products, contact){
+    fetch(`http://localhost:3000/api/products/order`, {
+        method: "POST",
+        body: JSON.stringify(products, contact),
+        Headers: {
+            "Content-Type" : "application/json"
+        }
+    })
+    .then((res) => res.json())
+    .then((data) => {
+        console.log("data", data);
+        return data
+    })
+}

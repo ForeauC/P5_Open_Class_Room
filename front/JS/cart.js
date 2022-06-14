@@ -176,6 +176,7 @@ function AddEventchangeQuantity() {
 function changeQuantity(e){
     const quantityElement = e.target.closest("input.itemQuantity");//cibler l'input pour le changement de quantité
     console.log("element", quantityElement);
+    const errorElement = document.getElementsByClassName("cart__item__content__settings__quantity")
 
     if(quantityElement != null) {
 
@@ -191,9 +192,10 @@ function changeQuantity(e){
         let foundProduct = cart.findIndex(p => p.idProduct === productId && p.color === productColor);//pour chercher le meme l'id et couleur dans le LS
         console.log("found",foundProduct)
        
-        if (foundProduct != undefined) {
+        if (foundProduct != undefined && number <= 100) {
         cart[foundProduct].quantity = parseInt(number);//ajouter la nouvelle quantité au LS
         cart.push(localStorage.setItem("cart", JSON.stringify(cart)))//push du nouveau panier avec la nouvelle quantité
+        location.reload();
         }
     }
     getNumberProduct();
@@ -267,10 +269,34 @@ const regExpAddress = /^[0-9A-Za-zÀ-ÖØ-öø-ÿ\-\'\ ]{5,30}$/;
 const regExpEmail = /\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/i;
 
 let errors = [];
+
+inputFirstName.addEventListener('change' , (e) => {
+    validateForm(inputFirstName, regExpText, errorFirstName, 'Merci de saisir votre prénom');
+})
+
+inputLastName.addEventListener('change' , (e) => {
+    validateForm(inputLastName, regExpText, errorLastName, 'Merci de saisir votre nom');
+})
+
+inputAddress.addEventListener('change' , (e) => {
+    validateForm(inputAddress, regExpAddress, errorAddress, 'Merci de saisir votre adresse');
+})
+
+inputCity.addEventListener('change' , (e) => {
+    validateForm(inputCity, regExpText, errorCity, 'Merci de saisir votre ville');
+})
+
+inputEmail.addEventListener('change' , (e) => {
+    validateForm(inputEmail, regExpEmail, errorEmail, 'Merci de saisir une adresse email valide');
+
+})
+
+const button = document.querySelector("#order");
+button.disabled = true
+
 // test de la valeur rentrer par l'utilisateur et  affichage du message d'erreur
-function validateForm (input, regexp, error, message) {
-    input.addEventListener('change', (e) => {
-        let regexpTest = regexp.test(e.target.value);//test avec le regex selon input renseigner
+function validateForm (e, regexp, error, message) {
+        let regexpTest = regexp.test(e.value);//test avec le regex selon input renseigner
         console.log("regexpTest", regexpTest)
         if(regexpTest === false) {
             error.textContent = message;//texte d'erreur 
@@ -279,19 +305,14 @@ function validateForm (input, regexp, error, message) {
         } else {
          error.textContent = '☑️';// validation si le test regex est ok
          errors = errors.filter(id => id != error);//aucun message d'erreur si il n'y pas d'erreur
+         button.disabled = false
         }
-    })
 }
-
-validateForm(inputFirstName, regExpText, errorFirstName, 'Merci de saisir votre prénom');
-validateForm(inputLastName, regExpText, errorLastName, 'Merci de saisir votre nom');
-validateForm(inputAddress, regExpAddress, errorAddress, 'Merci de saisir votre adresse');
-validateForm(inputCity, regExpText, errorCity, 'Merci de saisir votre ville');
-validateForm(inputEmail, regExpEmail, errorEmail, 'Merci de saisir une adresse email valide');
 
 //function pour l'envoie du panier pour la commande 
 function validateCart(){
     const orderForm = document.querySelector(".cart__order__form");
+    orderForm.disabled = true
     
     orderForm.addEventListener("submit", (e) =>{
         e.preventDefault();
@@ -305,11 +326,11 @@ function validateCart(){
             }
 
             let contact = {
-                firstName: inputFirstName.innerText,
-                lastName: inputLastName.innerText,
-                address: inputAddress.innerText,
-                city: inputCity.innerText,
-                email: inputEmail.innerText
+                firstName: inputFirstName.value,
+                lastName: inputLastName.value,
+                address: inputAddress.value,
+                city: inputCity.value,
+                email: inputEmail.value
             }
             console.log("contact", contact)
 
@@ -321,17 +342,21 @@ function validateCart(){
 
 validateCart();
 
-function sendFormaly(products, contact){
-    fetch(`http://localhost:3000/api/products/order`, {
+
+function sendFormaly(products, contact) {
+    fetch('http://localhost:3000/api/products/order', {  
         method: "POST",
-        body: JSON.stringify(products, contact),
-        Headers: {
-            "Content-Type" : "application/json"
-        }
+        headers: {
+            'Accept': 'application/json, text/plain, */*', 
+            'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify({products, contact})
     })
-    .then((res) => res.json())
-    .then((data) => {
-        console.log("data", data);
-        return data
+    .then(res => res.json())
+    .then ((orderData) => {
+        let idOrder = orderData.orderId;
+        document.location.href = `./confirmation.html?id=${idOrder}`
+    })
+    .catch(error => {console.log(error);
     })
 }

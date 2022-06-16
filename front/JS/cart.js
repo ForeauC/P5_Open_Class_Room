@@ -219,9 +219,9 @@ function removeProduct(e){
     const deleteText = deleteP.innerText//texte pour supprimer un produit dans le dom
     console.log("delete", deleteText)
 
-    const productId = e.target.closest("article.cart--item").getAttribute('data-id');
+    const productId = e.target.closest("article.cart__item").getAttribute('data-id');
     console.log("id",productId)//cibler l'id du produit dans le dom
-    const productColor = e.target.closest("article.cart--item").getAttribute('data-color');
+    const productColor = e.target.closest("article.cart__item").getAttribute('data-color');
     console.log("color",productColor)//cibler la couleur du produit dans le dom
 
     let cart = getCart();

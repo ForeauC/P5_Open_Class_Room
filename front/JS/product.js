@@ -56,6 +56,37 @@ function buildHTML() {
     }     
 }      
 
+const errorElementColor = document.querySelector('.item__content__settings__color');
+console.log("errorElC", errorElementColor)
+
+function showError (errorElementColor, errorClass, errorMessage) {
+    const errorMsg = document.createElement('p');
+    errorMsg.classList.add(errorClass);
+    errorMsg.textContent = errorMessage;
+    errorMsg.style.color = 'red';
+    errorMsg.style.fontSize = '15px'
+    errorMsg.style.textAlign ='center';
+    errorMsg.style.padding = '5px';
+    errorMsg.style.margin = '5px';
+    errorElementColor.appendChild(errorMsg);
+}
+
+
+const errorElement = document.querySelector('.item__content__settings__quantity');
+
+function showErrorQ (errorElement, errorClass, errorMessage) {
+    const errorMsg = document.createElement('p');
+    errorMsg.classList.add(errorClass);
+    errorMsg.textContent = errorMessage;
+    errorMsg.style.color = 'red';
+    errorMsg.style.fontSize = '15px'
+    errorMsg.style.textAlign ='center';
+    errorMsg.style.padding = '5px';
+    errorMsg.style.margin = '5px';
+    errorElement.appendChild(errorMsg);
+}
+
+
 function clickButtonCard() {
     addToCartButton.addEventListener("click", (event) => {
         addToBasket();
@@ -67,10 +98,10 @@ function addToBasket() {
     const color = colorsOption.value;
     const quantity = productQuantity.value;
         //si au moin une de ces valeurs n'est pas acceptée (ajout au panier invalide)
-        if (color === "") {
-            alert("Veuillez renseigner la couleur de vottre choix") = color;
+        if (color === ""  ) {
+            showError(errorElementColor, 'errorColor', 'Merci de sélectionner une couleur')
         } else if (quantity < 1 || quantity > 100) {
-            alert("Veuillez renseigner la quantité de votre choix") = quantity;
+            showErrorQ(errorElement, 'errorQuantity', 'La quantité est invalide');
         } else {
             const validProduct = {
                 color: color,
@@ -80,6 +111,7 @@ function addToBasket() {
             alert("produit ajouté au panier avec succès")
             console.log(validProduct);
             addCart(validProduct);
+            location.reload();
         }
 }
 

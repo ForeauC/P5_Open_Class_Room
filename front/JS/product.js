@@ -15,12 +15,10 @@ async function init(){
 function getProductById() {
     let params = new URL(document.location).searchParams;
     let id = params.get("id");// id du produit
-    console.log(id);
     return ( 
         fetch(`http://localhost:3000/api/products/${id}`)
             .then((res) => res.json())
             .then((data) => {
-                console.log("data", data);
                 return data
             })
             .catch((data) => { 
@@ -57,7 +55,6 @@ function buildHTML() {
 }      
 
 const errorElementColor = document.querySelector('.item__content__settings__color');
-console.log("errorElC", errorElementColor)
 
 function showError (errorElementColor, errorClass, errorMessage) {
     const errorMsg = document.createElement('p');
@@ -109,7 +106,6 @@ function addToBasket() {
                 idProduct : product._id,
             };
             alert("produit ajouté au panier avec succès")
-            console.log(validProduct);
             addCart(validProduct);
             location.reload();
         }
@@ -135,7 +131,6 @@ function addCart(product) {
     const color = colorsOption.value;
     const quantity = productQuantity.value;  
     
-    
     let cart = getCart();
 
     let foundProduct = cart.find(p => p.id === product.id && p.color === product.color);
@@ -149,11 +144,9 @@ function addCart(product) {
        
         product.color = color
         cart.push(product)
-        console.log("cart",cart)
     }
     saveCart(cart);
 }
-
 
 
 init();

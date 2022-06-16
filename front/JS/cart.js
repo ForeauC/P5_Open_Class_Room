@@ -1,8 +1,5 @@
-
 //afficher les produits du LocalStorage
 const productInLocalStorage = JSON.parse(localStorage.getItem("cart"));
-//console.log(productInLocalStorage);
-
 
 async function init() {
     noProductInLocalStorage();
@@ -25,7 +22,6 @@ function getProducts(idProduct) {
     fetch(`http://localhost:3000/api/products/${idProduct}`)
         .then((res) => res.json())
         .then((data) => {
-            //console.log("data", data);
             return data
         })
         .catch((data) => { 
@@ -57,10 +53,8 @@ async function getProductsFromAPI() {
 async function buildHTMLCart(){
 
     const elementToBuildHTML =   await getProductsFromAPI();
-    console.log("element HTML", elementToBuildHTML)
     
     elementToBuildHTML.forEach(elementCart =>{
-        console.log(elementCart)
 
         const cartSection = document.getElementById("cart__items");
 
@@ -175,32 +169,25 @@ function AddEventchangeQuantity() {
 // fonction pour changer la quantité dans le dom et le local storage
 function changeQuantity(e){
     const quantityElement = e.target.closest("input.itemQuantity");//cibler l'input pour le changement de quantité
-    console.log("element", quantityElement);
-    const errorElement = document.getElementsByClassName("cart__item__content__settings__quantity")
 
     if(quantityElement != null) {
-
-        const number = quantityElement.value;//valeur quantité dans le dom
-        console.log("number", number)
+        //valeur quantité dans le dom
+        const number = quantityElement.value;
         const productId = e.target.closest("article.cart__item").getAttribute('data-id');
-        console.log("id",productId)//cibler l'id du produit dans le dom
         const productColor = e.target.closest("article.cart__item").getAttribute('data-color');
-        console.log("color",productColor)//cibler la couleur du produit dans le dom
-
-        let cart = getCart();//on vas chercher le contenu du LS
-        console.log("caaart",cart)
+        //on vas chercher le contenu du LS
+        let cart = getCart();
         let foundProduct = cart.findIndex(p => p.idProduct === productId && p.color === productColor);//pour chercher le meme l'id et couleur dans le LS
-        console.log("found",foundProduct)
        
         if (foundProduct != undefined && number <= 100) {
-        cart[foundProduct].quantity = parseInt(number);//ajouter la nouvelle quantité au LS
-        cart.push(localStorage.setItem("cart", JSON.stringify(cart)))//push du nouveau panier avec la nouvelle quantité
-        location.reload();
+        //ajouter la nouvelle quantité au LS  
+        cart[foundProduct].quantity = parseInt(number);
+        //push du nouveau panier avec la nouvelle quantité
+        cart.push(localStorage.setItem("cart", JSON.stringify(cart)));
         }
     }
     getNumberProduct();
     getTotalPrice();
-    location.reload();
 }
 
 function AddEventRemoveQuantity() {
@@ -215,24 +202,17 @@ function AddEventRemoveQuantity() {
 //function  pour supprimer un produit du panier
 function removeProduct(e){
     const deleteP = e.target.closest("p.deleteItem");//cibler le p pour supprimer un produit dans le dom
-    console.log("deleteP", deleteP)
-    const deleteText = deleteP.innerText//texte pour supprimer un produit dans le dom
-    console.log("delete", deleteText)
 
     const productId = e.target.closest("article.cart__item").getAttribute('data-id');
-    console.log("id",productId)//cibler l'id du produit dans le dom
     const productColor = e.target.closest("article.cart__item").getAttribute('data-color');
-    console.log("color",productColor)//cibler la couleur du produit dans le dom
 
     let cart = getCart();
     cart = cart.filter(p => p.idProduct != productId || p.color != productColor)//chercher les id et color qui ne faut pas supprimer
-    console.log("filter", cart)
 
     cart.push(localStorage.setItem("cart", JSON.stringify(cart)))//push du nouveau panier
 
     getNumberProduct();
     getTotalPrice();
-    location.reload();
 }
 
 // Function qui permet de récuper l'item "cart"
@@ -247,7 +227,7 @@ function getCart() {
 
 /*---------------------------------- Formulaire ---------------------------------------------*/
 
-// récupération les input du formulaire
+// récupération des input du formulaire
 const inputFirstName = document.querySelector('#firstName');
 const errorFirstName = document.querySelector('#firstNameErrorMsg');
 
@@ -270,6 +250,7 @@ const regExpEmail = /\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/i;
 
 let errors = [];
 
+//addEvent pour chaque input du formulaire, appel de la fonction validateForm, avec les paramètres selon l'input
 inputFirstName.addEventListener('change' , (e) => {
     validateForm(inputFirstName, regExpText, errorFirstName, 'Merci de saisir votre prénom');
 })
@@ -297,11 +278,10 @@ button.disabled = true
 // test de la valeur rentrer par l'utilisateur et  affichage du message d'erreur
 function validateForm (e, regexp, error, message) {
         let regexpTest = regexp.test(e.value);//test avec le regex selon input renseigner
-        console.log("regexpTest", regexpTest)
+
         if(regexpTest === false) {
             error.textContent = message;//texte d'erreur 
-            errors.push(error);// push du texte d'erreur si le test regex ne passe pas
-            console.log('tableau errors', error)   
+            errors.push(error);// push du texte d'erreur si le test regex ne passe pas  
         } else {
          error.textContent = '☑️';// validation si le test regex est ok
          errors = errors.filter(id => id != error);//aucun message d'erreur si il n'y pas d'erreur
@@ -322,7 +302,6 @@ function validateCart(){
         if(errors.length == 0 && cart.length > 0) {
             for(product of cart) {
                 products.push(product.idProduct)
-                console.log("products",products)
             }
 
             let contact = {
@@ -332,7 +311,6 @@ function validateCart(){
                 city: inputCity.value,
                 email: inputEmail.value
             }
-            console.log("contact", contact)
 
             sendFormaly(products, contact);// appel de la fonction d'envoi de la commande à l'API
     }
@@ -342,7 +320,7 @@ function validateCart(){
 
 validateCart();
 
-
+//envoi du tableau de produit et l'objet du formualaire à l'API et redirection vers la page confirmation avec l'id de commande
 function sendFormaly(products, contact) {
     fetch('http://localhost:3000/api/products/order', {  
         method: "POST",

@@ -2,7 +2,6 @@ let products = [];
 
 async function init() {
     products = await getProducts(); 
-    console.log(products);
     createHTML(products);
 }    
 
@@ -24,7 +23,6 @@ function getProducts() {
 function createHTML(products){
     //Pour chaque élément de la réponse, créer un log dans la console et créer le produit dans le DOM 
     products.forEach(function(element){
-        console.log(element);
     
         //Crée une balise a pour chaque produit
         const newA = document.createElement('a');

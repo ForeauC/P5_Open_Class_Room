@@ -188,6 +188,7 @@ function changeQuantity(e){
     }
     getNumberProduct();
     getTotalPrice();
+    location.reload();
 }
 
 function AddEventRemoveQuantity() {
@@ -213,6 +214,7 @@ function removeProduct(e){
 
     getNumberProduct();
     getTotalPrice();
+    location.reload();
 }
 
 // Function qui permet de récuper l'item "cart"
@@ -244,7 +246,7 @@ const inputEmail = document.querySelector('#email');
 const errorEmail = document.querySelector('#emailErrorMsg')
 
 // création regex (expressions réguliéres) pour contrôler le formulaire
-const regExpText = /^[A-Za-zÀ-ÖØ-öø-ÿ\-\'\ ]{2,30}$/;
+const regExpText = /^[A-Z][A-Za-z\é\è\ê\-]+$/;
 const regExpAddress = /^[0-9A-Za-zÀ-ÖØ-öø-ÿ\-\'\ ]{5,30}$/;
 const regExpEmail = /\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/i;
 
@@ -264,7 +266,7 @@ inputAddress.addEventListener('change' , (e) => {
 })
 
 inputCity.addEventListener('change' , (e) => {
-    validateForm(inputCity, regExpText, errorCity, 'Merci de saisir votre ville');
+    validateForm(inputCity, regExpAddress, errorCity, 'Merci de saisir votre ville');
 })
 
 inputEmail.addEventListener('change' , (e) => {

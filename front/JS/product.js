@@ -6,9 +6,16 @@ let product = [];
 
 async function init(){
     product = await getProductById();
-    console.log(product)
     buildHTML();
     clickButtonCard();
+}
+
+function checkProduct() {
+    const title = document.querySelector(".item")
+    //const errorTitle = document.createElement("h3")
+    title.innerText = "Pas de produits disponible"
+    title.style.color = "red"
+    //title.appendChild(errorTitle)
 }
 
 //function pour récupérer le produit avec son ID à partir de l'API
@@ -21,13 +28,15 @@ function getProductById() {
             .then((data) => {
                 return data
             })
-            .catch((data) => { 
+            .catch((error) => { 
+                checkProduct()
                 return error;
             }) 
         );
 }
 
 function buildHTML() {
+    
     //ajout de l'image et du alt texte du produit à partir de l'API
     const itemImg = document.querySelector(".item__img");
     const productImg = document.createElement("img"); 
@@ -42,7 +51,7 @@ function buildHTML() {
     productPrice.innerHTML = product.price;
     //ajout de la description du produit à partir du produit 
     const productDescription = document.getElementById("description");
-    productDescription.innerHTML = product.description;
+     productDescription.innerHTML = product.description;
         
     const productColorsChoice = document.getElementById("colors");
     //ajout du choix du couleur avec une boucle for à partir de l'API
@@ -52,6 +61,7 @@ function buildHTML() {
         colorChoice.innerHTML = product.colors[i];
         productColorsChoice.appendChild(colorChoice);
     }     
+    
 }      
 
 const errorElementColor = document.querySelector('.item__content__settings__color');
@@ -68,7 +78,6 @@ function showError (errorElementColor, errorClass, errorMessage) {
     errorElementColor.appendChild(errorMsg);
 }
 
-
 const errorElement = document.querySelector('.item__content__settings__quantity');
 
 function showErrorQ (errorElement, errorClass, errorMessage) {
@@ -84,6 +93,20 @@ function showErrorQ (errorElement, errorClass, errorMessage) {
 }
 
 
+function clearError() {
+    let errorMsgColor = document.querySelector('.errorColor')
+    let errorMsgQuantity = document.querySelector('.errorQuantity')
+
+    if (errorMsgColor !== null) {
+        errorMsgColor.remove();
+    } if (errorMsgQuantity != null) {
+        errorMsgQuantity.remove()
+    } else {
+        return false;
+    }  
+}
+
+
 function clickButtonCard() {
     addToCartButton.addEventListener("click", (event) => {
         addToBasket();
@@ -94,10 +117,11 @@ function clickButtonCard() {
 function addToBasket() {
     const color = colorsOption.value;
     const quantity = productQuantity.value;
+    clearError()
         //si au moin une de ces valeurs n'est pas acceptée (ajout au panier invalide)
         if (color === ""  ) {
-            showError(errorElementColor, 'errorColor', 'Merci de sélectionner une couleur')
-        } else if (quantity < 1 || quantity > 100) {
+            showError(errorElementColor, 'errorColor', 'Merci de sélectionner une couleur');
+        } if (quantity < 1 || quantity > 100) {
             showErrorQ(errorElement, 'errorQuantity', 'La quantité est invalide');
         } else {
             const validProduct = {
@@ -150,7 +174,3 @@ function addCart(product) {
 
 
 init();
-
-
-
-

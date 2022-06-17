@@ -5,17 +5,28 @@ async function init() {
     createHTML(products);
 }    
 
+//function pour afficher un message d'erreur sur la page en cas d'erreur du fetch à l'API
+function checkProducts() {
+    const titles = document.querySelector(".titles")
+    const errorTitles = document.createElement("h3")
+    errorTitles.innerText = "Pas de produits disponible"
+    errorTitles.style.color = 'red';
+    errorTitles.style.fontSize = '20px'
+    errorTitles.style.textAlign ='center';
+    titles.appendChild(errorTitles)
+}
+
 //fonction pour récupérer les produits à partir de l'API
 function getProducts() {
     return ( 
-    fetch('http://localhost:3000/api/products')
+    fetch('http://localhost:3000/api/products/')
         .then((res) => res.json())
         .then((data) => {
-            console.log("data", data);
             return data
         })
-        .catch((data) => { 
-            return error;
+        .catch((error) => { 
+            checkProducts()
+            return error
         }) 
     );
 }

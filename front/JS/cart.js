@@ -179,7 +179,7 @@ function changeQuantity(e){
         let cart = getCart();
         let foundProduct = cart.findIndex(p => p.idProduct === productId && p.color === productColor);//pour chercher le meme l'id et couleur dans le LS
        
-        if (foundProduct != undefined && number <= 100) {
+        if (foundProduct != undefined && number <= 99) {
         //ajouter la nouvelle quantité au LS  
         cart[foundProduct].quantity = parseInt(number);
         //push du nouveau panier avec la nouvelle quantité
@@ -294,7 +294,6 @@ function validateForm (e, regexp, error, message) {
 //function pour l'envoie du panier pour la commande 
 function validateCart(){
     const orderForm = document.querySelector(".cart__order__form");
-    orderForm.disabled = true
     
     orderForm.addEventListener("submit", (e) =>{
         e.preventDefault();

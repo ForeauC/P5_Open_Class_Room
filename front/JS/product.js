@@ -6,16 +6,22 @@ let product = [];
 
 async function init(){
     product = await getProductById();
-    buildHTML();
+    console.log(product)
+    checkProduct();
     clickButtonCard();
+    
 }
 
 function checkProduct() {
-    const title = document.querySelector(".item")
-    //const errorTitle = document.createElement("h3")
-    title.innerText = "Pas de produits disponible"
-    title.style.color = "red"
-    //title.appendChild(errorTitle)
+    if (Object.keys(product).length === 0) {
+    const title = document.querySelector(".item");
+    const errorTitle = document.createElement("h3");
+    errorTitle.innerText = "Pas de produits disponible";
+    errorTitle.style.color = "red";
+    title.appendChild(errorTitle);
+    } else  {
+        buildHTML();
+    }
 }
 
 //function pour récupérer le produit avec son ID à partir de l'API
@@ -29,14 +35,13 @@ function getProductById() {
                 return data
             })
             .catch((error) => { 
-                checkProduct()
                 return error;
             }) 
         );
 }
 
 function buildHTML() {
-    
+   
     //ajout de l'image et du alt texte du produit à partir de l'API
     const itemImg = document.querySelector(".item__img");
     const productImg = document.createElement("img"); 
@@ -51,7 +56,7 @@ function buildHTML() {
     productPrice.innerHTML = product.price;
     //ajout de la description du produit à partir du produit 
     const productDescription = document.getElementById("description");
-     productDescription.innerHTML = product.description;
+    productDescription.innerHTML = product.description;
         
     const productColorsChoice = document.getElementById("colors");
     //ajout du choix du couleur avec une boucle for à partir de l'API
@@ -61,11 +66,12 @@ function buildHTML() {
         colorChoice.innerHTML = product.colors[i];
         productColorsChoice.appendChild(colorChoice);
     }     
-    
+
 }      
 
 const errorElementColor = document.querySelector('.item__content__settings__color');
 
+//Message d'erreur quand la couleur n'est pas renseigner
 function showError (errorElementColor, errorClass, errorMessage) {
     const errorMsg = document.createElement('p');
     errorMsg.classList.add(errorClass);
@@ -80,6 +86,7 @@ function showError (errorElementColor, errorClass, errorMessage) {
 
 const errorElement = document.querySelector('.item__content__settings__quantity');
 
+//Message d'erreur quand la quantité n'est pas renseigner
 function showErrorQ (errorElement, errorClass, errorMessage) {
     const errorMsg = document.createElement('p');
     errorMsg.classList.add(errorClass);
@@ -92,7 +99,7 @@ function showErrorQ (errorElement, errorClass, errorMessage) {
     errorElement.appendChild(errorMsg);
 }
 
-
+//Supression des message d'erreur 
 function clearError() {
     let errorMsgColor = document.querySelector('.errorColor')
     let errorMsgQuantity = document.querySelector('.errorQuantity')
@@ -123,7 +130,7 @@ function addToBasket() {
             showError(errorElementColor, 'errorColor', 'Merci de sélectionner une couleur');
         } if (quantity < 1 || quantity > 100) {
             showErrorQ(errorElement, 'errorQuantity', 'La quantité est invalide');
-        } else {
+        } else if (color != "" && quantity > 1 && quantity < 100) {
             const validProduct = {
                 color: color,
                 quantity: quantity,

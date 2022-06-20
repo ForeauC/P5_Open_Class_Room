@@ -9,7 +9,7 @@ init();
 //Si il n'y as pas de produit dans le localStorage sinon afficher le ou les produits
 function noProductInLocalStorage() {
     const cartH1 = document.querySelector("h1");
-    if (productInLocalStorage === null || productInLocalStorage === 0) {
+    if (productInLocalStorage === null || productInLocalStorage === 0 || productInLocalStorage.length < 1) {
         cartH1.innerText = "Votre panier est vide.";
     } else {
         buildHTMLCart();

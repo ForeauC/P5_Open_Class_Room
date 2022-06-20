@@ -312,7 +312,7 @@ function validateCart(){
                 city: inputCity.value,
                 email: inputEmail.value
             }
-
+            localStorage.removeItem('cart')
             sendFormaly(products, contact);// appel de la fonction d'envoi de la commande à l'API
     }
     })

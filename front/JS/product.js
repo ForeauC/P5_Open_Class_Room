@@ -128,9 +128,9 @@ function addToBasket() {
         //si au moin une de ces valeurs n'est pas acceptée (ajout au panier invalide)
         if (color === ""  ) {
             showError(errorElementColor, 'errorColor', 'Merci de sélectionner une couleur');
-        } if (quantity < 1 || quantity > 100) {
+        } if (quantity < 1 || quantity > 99) {
             showErrorQ(errorElement, 'errorQuantity', 'La quantité est invalide');
-        } else if (color != "" && quantity > 1 && quantity < 100) {
+        } else if (color != "" && quantity >= 1 && quantity < 99) {
             const validProduct = {
                 color: color,
                 quantity: quantity,
